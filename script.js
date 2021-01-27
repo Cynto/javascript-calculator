@@ -53,16 +53,11 @@ function divide(num1, num2, ...num3) {
     }
     return total;
 }
+function remainder(num1, num2) {
+    return num1 % num2;
+}
 
-function operate(operator, num1, num2, ...num3) {
-    if(arguments.length < 3) {
-    return(operator(num1, num2))
-    }
-    else {
-        for(i = 0; i < num3.length; i++) {
-            total = num3[i]
-           
-        }
-        
-    }
+function operate(operator, num1, num2) {
+    return(operator(num1, num2));
+    
 }

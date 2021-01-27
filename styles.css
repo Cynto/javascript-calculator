@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    color: #edf0f1;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    
+}
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgba(0, 136, 169, 0.8);
+    
+}
+
+.container {
+    
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 500px;
+    background-color: #24252A;
+    
+    justify-content: center;
+    align-items: center;
+    box-shadow:  rgba(69, 149, 168, 0.8) 5px 3px;
+    border: rgb(129, 124, 124) 1px solid;
+    border-radius: 2px;
+}
+.display {
+    height: 100px;
+    width: 90%;
+    margin-top: 20px;
+    
+    background: rgb(102, 100, 100);
+    border-radius: 5px;
+    box-shadow: rgb(71, 70, 70) 1px 1px;
+    
+}
+
+.keypad {
+    display: flex;
+    
+    height: 70%;
+    width: 92%;
+    flex-direction: column;
+    justify-content: center;
+    
+    
+    
+}
+
+#numbers {
+    display: flex;
+    width: 75%;
+    height: 80%;
+    flex-wrap: wrap;
+    align-self: flex-end;
+   
+    margin-right: 4px;
+    position: relative;
+    top: -13%;
+}
+.number {
+    font-size: 40px;
+    border-radius: 5px;
+    width: 80px;
+    margin: 4px;
+    background: rgb(80, 78, 78);
+    box-shadow: rgb(71, 70, 70) 1px 1px;
+    cursor: pointer;
+    border: none;
+    
+}
+.number:hover {
+    background: rgb(102, 100, 100);
+}
+.number:focus {
+    box-shadow: none;
+    outline: none;
+    border: none;
+    background:  rgb(75, 74, 74);
+    font-size: 35px;
+}
+#operators {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 26%;
+    height: 100%;
+    justify-self: flex-end;
+    position: relative;
+    top: 7.5%;
+    
+}
+.operator {
+    width: 100%;
+    height: 58px;
+    margin: 5px;
+    
+    font-size: 40px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: rgb(153, 152, 152);
+    
+    
+}
+.operator:hover {
+    background: rgb(172, 170, 170);
+}
+
+.operator:focus {
+    box-shadow: none;
+    outline: none;
+    border: none;
+}
+.operator-top {
+    width: 80px;
+    height: 55px;
+    box-shadow: none;
+    outline: none;
+    border: none;
+    font-size: 40px;
+    border-radius: 5px;
+    background: rgb(153, 152, 152);
+    margin-right: 5px;
+}
+#clear {
+
+    margin-left: 5px;
+    background: rgba(82, 171, 194, 0.8);
+   
+    
+}
+#clear:hover {
+    background: rgba(92, 186, 209, 0.8);
+}
+
+#equals {
+    
+    background: rgba(82, 171, 194, 0.8);
+    height: 80px;
+    font-size: 60px;
+
+}
+#equals:hover {
+    background: rgba(92, 186, 209, 0.8);
+}
+#keypad-top {
+    height: 50px;
+}
+#keypad-bottom {
+    display: flex;
+    
+    
+    
+}
