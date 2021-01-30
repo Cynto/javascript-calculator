@@ -28,7 +28,8 @@ const sumText = document.querySelector('#sum');
 
 let num = 0;
 let total = '';
-let totalArray = [];
+let calc = '';
+let inputArray = [];
 let grandTotal = 0;
 
 
@@ -37,16 +38,16 @@ let round = 0;
 
 
 // added click event listner to buttons, which goes to numberClick function which adds numbers to h1 element.
-buttonZero.addEventListener('click',() => {num = 0; total += 0;numberClick(num);});
-buttonOne.addEventListener('click',() => {num = 1; total += 1;numberClick(num);});
-buttonTwo.addEventListener('click',() => {num = 2;total += 2;numberClick(num);});
-buttonThree.addEventListener('click',() => {num = 3;total += 3;numberClick(num);});
-buttonFour.addEventListener('click',() => {num = 4;total += 4;numberClick(num);});
-buttonFive.addEventListener('click',() => {num = 5;total += 5;numberClick(num);});
-buttonSix.addEventListener('click',() => {num = 6;total += 6;numberClick(num);});
-buttonSeven.addEventListener('click',() => {num = 7;total += 7;numberClick(num);});
-buttonEight.addEventListener('click',() => {num = 8;total += 8;numberClick(num);});
-buttonNine.addEventListener('click',() => {num = 9;total += 9;numberClick(num);});
+buttonZero.addEventListener('click',() => {num = 0; total += 0; calc += 0;numberClick(num);});
+buttonOne.addEventListener('click',() => {num = 1; total += 1;calc += 1;numberClick(num);});
+buttonTwo.addEventListener('click',() => {num = 2;total += 2;calc += 2;numberClick(num);});
+buttonThree.addEventListener('click',() => {num = 3;total += 3;calc += 3;numberClick(num);});
+buttonFour.addEventListener('click',() => {num = 4;total += 4;calc += 4;numberClick(num);});
+buttonFive.addEventListener('click',() => {num = 5;total += 5;calc += 5;numberClick(num);});
+buttonSix.addEventListener('click',() => {num = 6;total += 6;calc += 6;numberClick(num);});
+buttonSeven.addEventListener('click',() => {num = 7;total += 7;calc += 7;numberClick(num);});
+buttonEight.addEventListener('click',() => {num = 8;total += 8;calc += 8;numberClick(num);});
+buttonNine.addEventListener('click',() => {num = 9;total += 9;calc += 9;numberClick(num);});
 
 buttonDelete.addEventListener('click',() => {
     numberText.textContent = numberText.textContent.slice(0, -1)
@@ -64,115 +65,38 @@ buttonSubtract.addEventListener('click', () => {
         numberClick('-'); }
 })
 buttonAdd.addEventListener('click',() => {
-    splitArray('+');
+    startNew('add');
     if(numberText.textContent.charAt(numberText.textContent.length - 1) != '+' && numberText.textContent.length > 0) {
         numberClick('+');
 }})
 
-
-function splitArray(symbol) {
-    switch(symbol) {
-        case '+':
-            total += '+'
-            operator = 'add'
-            totalArray = total.split('+');
+function startNew(operator) {
+    inputArray.push(Number(total));
+    
+    total = ''
+    round += 1;
+    
+    switch(operator) {
+        case 'add':
+            console.log(round)
             
-            round += 1;
-            for(i = 0; i < totalArray.length; i++) {
-            
-                if(totalArray[-i] === undefined) {
-                    totalArray.splice(-i, 1);
-                }
-            }
-            console.log(totalArray.length)
-            if(totalArray.length === 2) {
-                grandTotal += operate(add, Number(totalArray[0]), Number(totalArray[1]));
-                totalArray = [];
-                total = '';
+            if(inputArray.length == 2) {
+                grandTotal= operate(add, inputArray[0], inputArray[1])
                 
-            } 
+                inputArray = [];
+                inputArray.push(grandTotal);
+            }
+            console.log(inputArray)
             break;
-        case '-':
-            total += '-'
-            operator = 'subtract'
-            totalArray = total.split('-');
-            
-            round += 1;
-            for(i = 0; i < totalArray.length; i++) {
-            
-                if(totalArray[-i] === undefined) {
-                    totalArray.splice(-i, 1);
-                }
-            }
-
-            console.log(totalArray)
-            if(totalArray.length === 2) {
-                grandTotal -= operate(subtract, Number(totalArray[0]), Number(totalArray[1]));
-                console.log(grandTotal)
-                totalArray = [];
-                total = '';
-                let anotherArray = [grandTotal]
-                console.log(anotherArray)
-                
-            } 
-            }
-            
 }
+}
+
 
 buttonEquals.addEventListener('click',() => {
     sumText.textContent = numberText.textContent;
   
     
-    switch(operator) {
-        case 'add':
-            totalArray = total.split('+');
-            if(totalArray.length === 2) {
-                grandTotal += operate(add, Number(totalArray[0]), Number(totalArray[1]));
-                totalArray = [];
-                total = '';
-                
-            } 
-        
-            if(totalArray.length === 1) {
-                console.log(totalArray)
-                let num1 = Number(totalArray[0]);
-                console.log(num1);
-                grandTotal = operate(add, grandTotal, num1);
-                
-                numberText.textContent = grandTotal
-            }
-            else {
-                numberText.textContent = grandTotal
-            }
-            break;
-        case 'subtract': 
-
-        totalArray = total.split('-');
-        
-            if(totalArray.length === 2) {
-                grandTotal = operate(subtract, Number(totalArray[0]), Number(totalArray[1]));
-                totalArray = [];
-                total = '';
-                
-            } 
-        
-            if(totalArray.length === 1) {
-                console.log(totalArray)
-                let num1 = Number(totalArray[0]);
-                console.log(num1);
-                grandTotal -= operate(subtract, grandTotal, num1);
-                
-                numberText.textContent = grandTotal
-            }
-            else {
-                numberText.textContent = grandTotal
-            }
-            break;
-            
-           
-           
-            
-    }
+   
 })
 
 function numberClick(value) {
@@ -180,10 +104,21 @@ function numberClick(value) {
     if(numberText.textContent.charAt(0) === '0') {
         numberText.textContent = '';
     };
+    if(round >= 2) {
+        if(value === '1' || value === 2 || value === 3 || value === 4 || value === 5 || value === 6 || value === 7 || value === 8 || value === 9 || value === 0 ) {
+            numberText.textContent = total;
+        }
+        else {
+            numberText.textContent = grandTotal
+        }
+    }
+    else {
+        numberText.textContent = total;
+    }
    
     
     
-    numberText.textContent += value;
+    
 }
 function clear() {
     round = 0;
@@ -191,6 +126,7 @@ function clear() {
     realNum = 0;
     realNum2 = 0;
     grandTotal = 0;
+    inputArray = [];
     sumText.textContent = '';
     numberText.textContent = 0;
 }
