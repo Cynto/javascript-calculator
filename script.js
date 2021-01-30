@@ -17,30 +17,184 @@ const buttonDelete = document.querySelector('#delete');
 const buttonClear = document.querySelector('#clear');
 const buttonDivide = document.querySelector('#divide');
 const buttonPower = document.querySelector('#power');
-
+const buttonSubtract = document.querySelector('#subtract');
 
 
 
 
 const numberText = document.querySelector('#number-text');
+numberText.textContent = 0;
+const sumText = document.querySelector('#sum');
 
 let num = 0;
-// added click event listner to buttons, which goes to numberClick function which adds numbers to h1 element.
-buttonZero.addEventListener('click',() => {num = 0; numberClick(num);});
-buttonOne.addEventListener('click',() => {num = 1;numberClick(num);});
-buttonTwo.addEventListener('click',() => {num = 2;numberClick(num);});
-buttonThree.addEventListener('click',() => {num = 3;numberClick(num);});
-buttonFour.addEventListener('click',() => {num = 4;numberClick(num);});
-buttonFive.addEventListener('click',() => {num = 5;numberClick(num);});
-buttonSix.addEventListener('click',() => {num = 6;numberClick(num);});
-buttonSeven.addEventListener('click',() => {num = 7;numberClick(num);});
-buttonEight.addEventListener('click',() => {num = 8;numberClick(num);});
-buttonNine.addEventListener('click',() => {num = 9;numberClick(num);});
+let total = '';
+let totalArray = [];
+let grandTotal = 0;
 
-function numberClick(num) {
+
+let operator = '';
+let round = 0;
+
+
+// added click event listner to buttons, which goes to numberClick function which adds numbers to h1 element.
+buttonZero.addEventListener('click',() => {num = 0; total += 0;numberClick(num);});
+buttonOne.addEventListener('click',() => {num = 1; total += 1;numberClick(num);});
+buttonTwo.addEventListener('click',() => {num = 2;total += 2;numberClick(num);});
+buttonThree.addEventListener('click',() => {num = 3;total += 3;numberClick(num);});
+buttonFour.addEventListener('click',() => {num = 4;total += 4;numberClick(num);});
+buttonFive.addEventListener('click',() => {num = 5;total += 5;numberClick(num);});
+buttonSix.addEventListener('click',() => {num = 6;total += 6;numberClick(num);});
+buttonSeven.addEventListener('click',() => {num = 7;total += 7;numberClick(num);});
+buttonEight.addEventListener('click',() => {num = 8;total += 8;numberClick(num);});
+buttonNine.addEventListener('click',() => {num = 9;total += 9;numberClick(num);});
+
+buttonDelete.addEventListener('click',() => {
+    numberText.textContent = numberText.textContent.slice(0, -1)
+    total = Math.floor(total / 10);
+    if (numberText.textContent.length === 0) {
+        clear();
+    }
     
-    numberText.textContent += num;
+
+})
+buttonClear.addEventListener('click', clear);
+buttonSubtract.addEventListener('click', () => {
+    splitArray('-');
+    if(numberText.textContent.charAt(numberText.textContent.length - 1) != '-' && numberText.textContent.length > 0) {
+        numberClick('-'); }
+})
+buttonAdd.addEventListener('click',() => {
+    splitArray('+');
+    if(numberText.textContent.charAt(numberText.textContent.length - 1) != '+' && numberText.textContent.length > 0) {
+        numberClick('+');
+}})
+
+
+function splitArray(symbol) {
+    switch(symbol) {
+        case '+':
+            total += '+'
+            operator = 'add'
+            totalArray = total.split('+');
+            
+            round += 1;
+            for(i = 0; i < totalArray.length; i++) {
+            
+                if(totalArray[-i] === undefined) {
+                    totalArray.splice(-i, 1);
+                }
+            }
+            console.log(totalArray.length)
+            if(totalArray.length === 2) {
+                grandTotal += operate(add, Number(totalArray[0]), Number(totalArray[1]));
+                totalArray = [];
+                total = '';
+                
+            } 
+            break;
+        case '-':
+            total += '-'
+            operator = 'subtract'
+            totalArray = total.split('-');
+            
+            round += 1;
+            for(i = 0; i < totalArray.length; i++) {
+            
+                if(totalArray[-i] === undefined) {
+                    totalArray.splice(-i, 1);
+                }
+            }
+
+            console.log(totalArray)
+            if(totalArray.length === 2) {
+                grandTotal -= operate(subtract, Number(totalArray[0]), Number(totalArray[1]));
+                console.log(grandTotal)
+                totalArray = [];
+                total = '';
+                let anotherArray = [grandTotal]
+                console.log(anotherArray)
+                
+            } 
+            }
+            
 }
+
+buttonEquals.addEventListener('click',() => {
+    sumText.textContent = numberText.textContent;
+  
+    
+    switch(operator) {
+        case 'add':
+            totalArray = total.split('+');
+            if(totalArray.length === 2) {
+                grandTotal += operate(add, Number(totalArray[0]), Number(totalArray[1]));
+                totalArray = [];
+                total = '';
+                
+            } 
+        
+            if(totalArray.length === 1) {
+                console.log(totalArray)
+                let num1 = Number(totalArray[0]);
+                console.log(num1);
+                grandTotal = operate(add, grandTotal, num1);
+                
+                numberText.textContent = grandTotal
+            }
+            else {
+                numberText.textContent = grandTotal
+            }
+            break;
+        case 'subtract': 
+
+        totalArray = total.split('-');
+        
+            if(totalArray.length === 2) {
+                grandTotal = operate(subtract, Number(totalArray[0]), Number(totalArray[1]));
+                totalArray = [];
+                total = '';
+                
+            } 
+        
+            if(totalArray.length === 1) {
+                console.log(totalArray)
+                let num1 = Number(totalArray[0]);
+                console.log(num1);
+                grandTotal -= operate(subtract, grandTotal, num1);
+                
+                numberText.textContent = grandTotal
+            }
+            else {
+                numberText.textContent = grandTotal
+            }
+            break;
+            
+           
+           
+            
+    }
+})
+
+function numberClick(value) {
+    
+    if(numberText.textContent.charAt(0) === '0') {
+        numberText.textContent = '';
+    };
+   
+    
+    
+    numberText.textContent += value;
+}
+function clear() {
+    round = 0;
+    total = '';
+    realNum = 0;
+    realNum2 = 0;
+    grandTotal = 0;
+    sumText.textContent = '';
+    numberText.textContent = 0;
+}
+
 
 
 function add(num1, num2, ...num3) {

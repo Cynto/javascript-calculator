@@ -28,7 +28,7 @@ body {
     
     justify-content: center;
     align-items: center;
-    box-shadow:  rgba(47, 56, 58, 0.8) 5px 3px;
+    box-shadow:  rgba(47, 56, 58, 0.1) 5px 3px;
     border: rgb(129, 124, 124) 1px solid;
     border-radius: 2px;
 }
@@ -37,15 +37,34 @@ body {
     width: 90%;
     margin-top: 20px;
     display: flex;
+    flex-direction: column;
     background: rgb(102, 100, 100);
     border-radius: 5px;
     box-shadow: rgb(99, 97, 97) 1px 1px;
-    align-items: center;
-    justify-content: flex-end;
     
+    
+    
+}
+#display-top {
+    display:flex;
+    justify-content: flex-end;
+    height: 30%;
+    width: 100%;
+}
+#display-bottom {
+    display:flex;
+    justify-content: flex-end;
+    height: 70%;
+    width: 100%;
 }
 #number-text {
     margin-right: 15px;
+    max-width: 330px;
+    word-wrap: break-word;
+}
+#sum {
+    margin-right: 15px;
+    color:rgba(82, 171, 194, 0.8)
 }
 
 .keypad {
