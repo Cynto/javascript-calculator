@@ -80,6 +80,8 @@ body {
 }
 #keypad-top {
     height: 50px;
+    display: flex;
+    justify-content: space-between;
 }
 #keypad-top span {
     font-size: 30px;
@@ -178,6 +180,17 @@ body {
 .operator-top:hover {
     background: rgb(172, 170, 170);
 }
+#delete {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+}
+button div {
+    font-size: 80px;
+    position: relative;
+    top: -65%;
+}
 #clear {
 
     margin-left: 5px;
@@ -235,5 +248,6 @@ footer a {
 }
 footer a:hover {
     transform: translateY(2px);
+    color:rgba(0, 136, 169, 0.8)
 }
 
