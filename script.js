@@ -32,12 +32,12 @@ let calc = '';
 let inputArray = [];
 let grandTotal = 0;
 
-
-let operator = '';
+let operative = ''
+let operator2 = '';
 let round = 0;
 
 
-// added click event listner to buttons, which goes to numberClick function which adds numbers to h1 element.
+// added click event listner to buttons, which goes to numberClick function.
 buttonZero.addEventListener('click',() => {num = 0; total += 0; calc += 0;numberClick(num);});
 buttonOne.addEventListener('click',() => {num = 1; total += 1;calc += 1;numberClick(num);});
 buttonTwo.addEventListener('click',() => {num = 2;total += 2;calc += 2;numberClick(num);});
@@ -58,48 +58,232 @@ buttonDelete.addEventListener('click',() => {
     
 
 })
+//adding event listeners to operator buttons, so when clicked they'll use the startNew function.
 buttonClear.addEventListener('click', clear);
 buttonSubtract.addEventListener('click', () => {
-    splitArray('-');
+    operator2 = 'subtract';
+    if(operative === '') {
+        startNew('subtract');
+    }
+    else {
+        startNew(operative)
+    }
+    if(calc.charAt(calc.length - 1) != '-' && calc.length > 0) {
+        calc += '-';
+    }
     if(numberText.textContent.charAt(numberText.textContent.length - 1) != '-' && numberText.textContent.length > 0) {
         numberClick('-'); }
 })
 buttonAdd.addEventListener('click',() => {
-    startNew('add');
+    operator2 = 'add'
+    if(operative === '') {
+        startNew('add');
+    }
+    else {
+        startNew(operative)
+    }
+    if(calc.charAt(calc.length - 1) != '+' && calc.length > 0) {
+        calc += '+';
+    }
     if(numberText.textContent.charAt(numberText.textContent.length - 1) != '+' && numberText.textContent.length > 0) {
         numberClick('+');
 }})
+buttonMultiply.addEventListener('click', () => {
+    operator2 = 'multiply';
+    if(operative === '') {
+        startNew('multiply');
+    }
+    else {
+        startNew(operative)
+    }
+
+
+    if(calc.charAt(calc.length - 1) != 'x' && calc.length > 0) {
+        calc += 'x'; }
+        if(numberText.textContent.charAt(numberText.textContent.length - 1) != 'x' && numberText.textContent.length > 0) {
+            numberClick('x');
+    }
+
+})
+buttonDivide.addEventListener('click',() => {
+    operator2 = 'divide';
+    if(operative === '') {
+        startNew('divide');
+    }
+    else {
+        startNew(operative)
+    }
+
+
+    if(calc.charAt(calc.length - 1) != 'x' && calc.length > 0) {
+        calc += '÷'; }
+        if(numberText.textContent.charAt(numberText.textContent.length - 1) != '÷' && numberText.textContent.length > 0) {
+            numberClick('÷');
+    }
+})
 
 function startNew(operator) {
     inputArray.push(Number(total));
     
     total = ''
     round += 1;
+    if(inputArray[1] === 0) {
+        inputArray.pop();
+    }
+    console.log(inputArray)
+    //switch statement checks which operator was clicked
     
     switch(operator) {
         case 'add':
-            console.log(round)
             
-            if(inputArray.length == 2) {
+            
+            console.log(inputArray.length)
+            if(inputArray.length == 1) {
+                operative = 'add';
+                console.log('operator ' +operative)
+            }
+            //when the array has two elements, it'll use the operate function along with the operator clicked.
+            else if(inputArray.length == 2) {
+                sumText.textContent = calc;
                 grandTotal= operate(add, inputArray[0], inputArray[1])
+                
+                inputArray = []; //when grand total is calculated, the array is reset.
+                inputArray.push(grandTotal);
+                operative = '';
+            }
+            operative = operator2;
+            
+            break;
+
+        case 'subtract':
+            if(inputArray.length == 1) {
+                operative = 'subtract';
+                console.log('operative: ' + operative)
+                
+            }
+            else if(inputArray.length == 2) {
+                sumText.textContent = calc;
+                grandTotal= operate(subtract, inputArray[0], inputArray[1])
                 
                 inputArray = [];
                 inputArray.push(grandTotal);
+                operative = '';
             }
-            console.log(inputArray)
+            operative = operator2;
+            console.log('operator ' +operative)
+            
+        break;
+        case 'multiply':
+            if(inputArray.length == 1) {
+                operative = 'multiply';
+                console.log('operative: ' + operative)
+            }
+            else if(inputArray.length == 2) {
+                
+                
+                if(inputArray[1] === 0) {
+                    inputArray[1] = 1;
+                } 
+                sumText.textContent = calc;
+                grandTotal= operate(multiply, inputArray[0], inputArray[1])
+                
+                inputArray = [];
+                inputArray.push(grandTotal);
+                
+                operative = '';
+            }
+           operative = operator2;
+            break;
+        case 'divide':
+            
+            if(inputArray.length == 1) {
+                operative = 'divide';
+                console.log('operative: ' + operative)
+            }
+            else if(inputArray.length == 2) {
+                //if user is dividing by 0, it'll be replaced by 1
+                if(inputArray[1] === 0) {
+                    inputArray[1] = 1;
+                } 
+                sumText.textContent = calc;
+                grandTotal= operate(divide, inputArray[0], inputArray[1])
+                
+                inputArray = [];
+                inputArray.push(grandTotal);
+                operative = '';
+            }
+            operative = operator2;
+            
+            break;
+        case 'equals': 
+            
+            if(operator2 === 'add') {
+                if(inputArray.length == 2) {
+                    sumText.textContent = calc;
+                    grandTotal= operate(add, inputArray[0], inputArray[1])
+                    numberText.textContent = grandTotal;
+                    inputArray = []; //when grand total is calculated, the array is reset.
+                    inputArray.push(grandTotal);
+                }
+            }
+            else if(operator2 === 'subtract') {
+                if(inputArray.length == 2) {
+                    sumText.textContent = calc;
+                    console.log(inputArray)
+                    grandTotal= operate(subtract, inputArray[0], inputArray[1])
+                    console.log(grandTotal)
+                    inputArray = [];
+                    inputArray.push(grandTotal);
+                    
+                }
+            }
+            else if(operator2 === 'multiply') {
+                if(inputArray.length == 2) {
+                    console.log(inputArray)
+                    if(inputArray[1] === 0) {
+                        inputArray[1] = 1;
+                    } 
+                    console.log(inputArray)
+                    sumText.textContent = calc;
+                    grandTotal= operate(multiply, inputArray[0], inputArray[1])
+                    
+                    inputArray = [];
+                    inputArray.push(grandTotal);
+                    console.log(inputArray)
+                }
+            }
+            else if(operator2 === 'divide') {
+                if(inputArray.length == 2) {
+                    if(inputArray[1] === 0) {
+                        inputArray[1] = 1;
+                    } 
+                    sumText.textContent = calc;
+                    grandTotal= operate(divide, inputArray[0], inputArray[1])
+                    
+                    inputArray = [];
+                    inputArray.push(grandTotal);
+                }
+            }
             break;
 }
 }
 
 
 buttonEquals.addEventListener('click',() => {
-    sumText.textContent = numberText.textContent;
-  
-    
-   
+    startNew('equals');
+    numberClick('=');
 })
 
 function numberClick(value) {
+    //if statement checks if the user is dividing by zero, if they are, an alert pops up.
+    if(calc.includes('÷0')) {
+        calc = calc.slice(0, -1);
+        calc += 1;
+        alert('Please try not to divide by 0!')
+        total += 1;
+        numberText.textContent = grandTotal
+
+    }
     
     if(numberText.textContent.charAt(0) === '0') {
         numberText.textContent = '';
@@ -123,10 +307,11 @@ function numberClick(value) {
 function clear() {
     round = 0;
     total = '';
-    realNum = 0;
-    realNum2 = 0;
+    calc = '';
     grandTotal = 0;
     inputArray = [];
+    operator2 = '';
+    operative = '';
     sumText.textContent = '';
     numberText.textContent = 0;
 }
