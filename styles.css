@@ -214,3 +214,26 @@ body {
 #zero {
     width: 168px;
 }
+
+footer {
+    display: flex;
+    height: 70px;
+    width: 100%;
+    position: relative;
+    top: 21.2%;
+    background: #24252A;
+    align-items: center;
+    justify-content: space-between;
+}
+footer h2 {
+    margin-left: 20px;
+}
+footer a {
+    
+    margin-right: 20px;
+    text-decoration: none;
+}
+footer a:hover {
+    transform: translateY(2px);
+}
+
