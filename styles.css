@@ -210,3 +210,7 @@ body {
 #delete:hover {
     background: rgba(92, 186, 209, 0.8);
 }
+
+#zero {
+    width: 168px;
+}

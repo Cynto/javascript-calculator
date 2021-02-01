@@ -9,6 +9,7 @@ const buttonSix = document.querySelector('#six');
 const buttonSeven = document.querySelector('#seven');
 const buttonEight = document.querySelector('#eight');
 const buttonNine = document.querySelector('#nine');
+const buttonDecimal = document.querySelector('#decimal')
 
 const buttonEquals = document.querySelector('#equals');
 const buttonAdd = document.querySelector('#add');
@@ -49,32 +50,96 @@ buttonSeven.addEventListener('click',() => {num = 7;total += 7;calc += 7;numberC
 buttonEight.addEventListener('click',() => {num = 8;total += 8;calc += 8;numberClick(num);});
 buttonNine.addEventListener('click',() => {num = 9;total += 9;calc += 9;numberClick(num);});
 
-buttonDelete.addEventListener('click',() => {
+const keyButton = document.querySelector('.number');
+
+
+//Keyboard support
+document.addEventListener('keydown', () => {
+    console.log(event.key)
+    //checks if keyboard input is a number
+    if(Number(event.key) / 1 === Number(event.key)) {
+        num = event.key;
+        total += event.key;
+        calc = event.key;
+        numberClick(num)
+        numberText.textContent = total;
+    }
+    else {
+        //switch statement checks what keyboard operator is pressed
+        switch(event.key) {
+            case '.': 
+                decimal()
+                break;
+            case 'Backspace':
+                deleter();
+                break;
+            case '+':
+                adder();
+                break;
+            case '-': 
+                subber();
+                break;
+            case '/':
+                divider();
+                break;
+            case 'x':
+                multiplier();
+                break;
+            case '=':
+                startNew('equals');
+                numberClick('=');
+                break;
+            case 'Enter': 
+                startNew('equals');
+                numberClick('=');
+                break;
+        }
+    }
+})
+
+
+
+
+//adding event listeners to operator buttons, so when clicked they'll use the startNew function.
+buttonClear.addEventListener('click', clear);
+buttonSubtract.addEventListener('click', subber)
+buttonAdd.addEventListener('click', adder);
+buttonMultiply.addEventListener('click', multiplier)
+buttonDivide.addEventListener('click', divider)
+buttonDelete.addEventListener('click',deleter)
+buttonDecimal.addEventListener('click',decimal)
+buttonEquals.addEventListener('click',() => {
+    startNew('equals');
+    numberClick('=');
+})
+
+
+function decimal() {
+    //checks if number types already has a decimal, if it hasn't, user is able to add one.
+    if(total.includes('.') === false) {
+        num = '.';
+        total += '.';
+        calc += '.';
+        numberClick(num);
+    }
+    console.log(total)
+    console.log(total[0] === '.')
+    if(total[0] === '.') {
+        total = total.replace('.', '0')
+        total += '.'
+
+    }
+    
+}
+function deleter() {
     numberText.textContent = numberText.textContent.slice(0, -1)
     total = Math.floor(total / 10);
     if (numberText.textContent.length === 0) {
         clear();
     }
-    
+}
 
-})
-//adding event listeners to operator buttons, so when clicked they'll use the startNew function.
-buttonClear.addEventListener('click', clear);
-buttonSubtract.addEventListener('click', () => {
-    operator2 = 'subtract';
-    if(operative === '') {
-        startNew('subtract');
-    }
-    else {
-        startNew(operative)
-    }
-    if(calc.charAt(calc.length - 1) != '-' && calc.length > 0) {
-        calc += '-';
-    }
-    if(numberText.textContent.charAt(numberText.textContent.length - 1) != '-' && numberText.textContent.length > 0) {
-        numberClick('-'); }
-})
-buttonAdd.addEventListener('click',() => {
+function adder() {
     operator2 = 'add'
     if(operative === '') {
         startNew('add');
@@ -87,25 +152,23 @@ buttonAdd.addEventListener('click',() => {
     }
     if(numberText.textContent.charAt(numberText.textContent.length - 1) != '+' && numberText.textContent.length > 0) {
         numberClick('+');
-}})
-buttonMultiply.addEventListener('click', () => {
-    operator2 = 'multiply';
+    }
+}
+function subber() {
+    operator2 = 'subtract';
     if(operative === '') {
-        startNew('multiply');
+        startNew('subtract');
     }
     else {
         startNew(operative)
     }
-
-
-    if(calc.charAt(calc.length - 1) != 'x' && calc.length > 0) {
-        calc += 'x'; }
-        if(numberText.textContent.charAt(numberText.textContent.length - 1) != 'x' && numberText.textContent.length > 0) {
-            numberClick('x');
+    if(calc.charAt(calc.length - 1) != '-' && calc.length > 0) {
+        calc += '-';
     }
-
-})
-buttonDivide.addEventListener('click',() => {
+    if(numberText.textContent.charAt(numberText.textContent.length - 1) != '-' && numberText.textContent.length > 0) {
+        numberClick('-'); }
+}
+function divider() {
     operator2 = 'divide';
     if(operative === '') {
         startNew('divide');
@@ -120,7 +183,23 @@ buttonDivide.addEventListener('click',() => {
         if(numberText.textContent.charAt(numberText.textContent.length - 1) != '÷' && numberText.textContent.length > 0) {
             numberClick('÷');
     }
-})
+}
+function multiplier() {
+    operator2 = 'multiply';
+    if(operative === '') {
+        startNew('multiply');
+    }
+    else {
+        startNew(operative)
+    }
+
+
+    if(calc.charAt(calc.length - 1) != 'x' && calc.length > 0) {
+        calc += 'x'; }
+        if(numberText.textContent.charAt(numberText.textContent.length - 1) != 'x' && numberText.textContent.length > 0) {
+            numberClick('x');
+    }
+}
 
 function startNew(operator) {
     inputArray.push(Number(total));
@@ -144,9 +223,17 @@ function startNew(operator) {
             }
             //when the array has two elements, it'll use the operate function along with the operator clicked.
             else if(inputArray.length == 2) {
-                sumText.textContent = calc;
+                sumText.textContent = `${inputArray[0]} + ${inputArray[1]}`
                 grandTotal= operate(add, inputArray[0], inputArray[1])
-                
+                //if statement checks if the grandtotal is an integer
+                if(Number.isInteger(grandTotal) === false) {
+                    decimalArray = grandTotal.toString().split('.')
+                    //if statement checks if the number has more than 4 decimal places.
+                    if(decimalArray[1].length >= 4) {
+                        grandTotal = grandTotal.toFixed(4)
+                    }
+                }
+
                 inputArray = []; //when grand total is calculated, the array is reset.
                 inputArray.push(grandTotal);
                 operative = '';
@@ -162,9 +249,14 @@ function startNew(operator) {
                 
             }
             else if(inputArray.length == 2) {
-                sumText.textContent = calc;
+                sumText.textContent = `${inputArray[0]} - ${inputArray[1]}`
                 grandTotal= operate(subtract, inputArray[0], inputArray[1])
-                
+                if(Number.isInteger(grandTotal) === false) {
+                    decimalArray = grandTotal.toString().split('.')
+                    if(decimalArray[1].length >= 4) {
+                        grandTotal = grandTotal.toFixed(4)
+                    }
+                }
                 inputArray = [];
                 inputArray.push(grandTotal);
                 operative = '';
@@ -184,9 +276,14 @@ function startNew(operator) {
                 if(inputArray[1] === 0) {
                     inputArray[1] = 1;
                 } 
-                sumText.textContent = calc;
+                sumText.textContent = `${inputArray[0]} x ${inputArray[1]}`
                 grandTotal= operate(multiply, inputArray[0], inputArray[1])
-                
+                if(Number.isInteger(grandTotal) === false) {
+                    decimalArray = grandTotal.toString().split('.')
+                    if(decimalArray[1].length >= 4) {
+                        grandTotal = grandTotal.toFixed(4)
+                    }
+                }
                 inputArray = [];
                 inputArray.push(grandTotal);
                 
@@ -205,9 +302,14 @@ function startNew(operator) {
                 if(inputArray[1] === 0) {
                     inputArray[1] = 1;
                 } 
-                sumText.textContent = calc;
+                sumText.textContent = `${inputArray[0]} ÷ ${inputArray[1]}`
                 grandTotal= operate(divide, inputArray[0], inputArray[1])
-                
+                if(Number.isInteger(grandTotal) === false) {
+                    decimalArray = grandTotal.toString().split('.')
+                    if(decimalArray[1].length >= 4) {
+                        grandTotal = grandTotal.toFixed(4)
+                    }
+                }
                 inputArray = [];
                 inputArray.push(grandTotal);
                 operative = '';
@@ -219,8 +321,14 @@ function startNew(operator) {
             
             if(operator2 === 'add') {
                 if(inputArray.length == 2) {
-                    sumText.textContent = calc;
+                    sumText.textContent = `${inputArray[0]} + ${inputArray[1]}`
                     grandTotal= operate(add, inputArray[0], inputArray[1])
+                    if(Number.isInteger(grandTotal) === false) {
+                        decimalArray = grandTotal.toString().split('.')
+                        if(decimalArray[1].length >= 4) {
+                            grandTotal = grandTotal.toFixed(4)
+                        }
+                    }
                     numberText.textContent = grandTotal;
                     inputArray = []; //when grand total is calculated, the array is reset.
                     inputArray.push(grandTotal);
@@ -228,10 +336,16 @@ function startNew(operator) {
             }
             else if(operator2 === 'subtract') {
                 if(inputArray.length == 2) {
-                    sumText.textContent = calc;
-                    console.log(inputArray)
+                    sumText.textContent = `${inputArray[0]} - ${inputArray[1]}`
+                    
                     grandTotal= operate(subtract, inputArray[0], inputArray[1])
-                    console.log(grandTotal)
+                    if(Number.isInteger(grandTotal) === false) {
+                        decimalArray = grandTotal.toString().split('.')
+                        if(decimalArray[1].length >= 4) {
+                            grandTotal = grandTotal.toFixed(4)
+                        }
+                    }
+                    
                     inputArray = [];
                     inputArray.push(grandTotal);
                     
@@ -244,9 +358,14 @@ function startNew(operator) {
                         inputArray[1] = 1;
                     } 
                     console.log(inputArray)
-                    sumText.textContent = calc;
+                    sumText.textContent = `${inputArray[0]} x ${inputArray[1]}`
                     grandTotal= operate(multiply, inputArray[0], inputArray[1])
-                    
+                    if(Number.isInteger(grandTotal) === false) {
+                        decimalArray = grandTotal.toString().split('.')
+                        if(decimalArray[1].length >= 4) {
+                            grandTotal = grandTotal.toFixed(4)
+                        }
+                    }
                     inputArray = [];
                     inputArray.push(grandTotal);
                     console.log(inputArray)
@@ -257,9 +376,14 @@ function startNew(operator) {
                     if(inputArray[1] === 0) {
                         inputArray[1] = 1;
                     } 
-                    sumText.textContent = calc;
+                    sumText.textContent = `${inputArray[0]} ÷ ${inputArray[1]}`
                     grandTotal= operate(divide, inputArray[0], inputArray[1])
-                    
+                    if(Number.isInteger(grandTotal) === false) {
+                        decimalArray = grandTotal.toString().split('.')
+                        if(decimalArray[1].length >= 4) {
+                            grandTotal = grandTotal.toFixed(4)
+                        }
+                    }
                     inputArray = [];
                     inputArray.push(grandTotal);
                 }
@@ -269,10 +393,7 @@ function startNew(operator) {
 }
 
 
-buttonEquals.addEventListener('click',() => {
-    startNew('equals');
-    numberClick('=');
-})
+
 
 function numberClick(value) {
     //if statement checks if the user is dividing by zero, if they are, an alert pops up.
@@ -284,10 +405,12 @@ function numberClick(value) {
         numberText.textContent = grandTotal
 
     }
-    
-    if(numberText.textContent.charAt(0) === '0') {
-        numberText.textContent = '';
-    };
+    if(total.length > 1) {
+        //if statement checks if the first value entered is 0, if it is, it is deleted as long as the length of the total is above 1.
+        if(total.charAt(0) === '0') {
+            total = total.substring(1)
+        };
+    }
     if(round >= 2) {
         if(value === '1' || value === 2 || value === 3 || value === 4 || value === 5 || value === 6 || value === 7 || value === 8 || value === 9 || value === 0 ) {
             numberText.textContent = total;
@@ -298,6 +421,9 @@ function numberClick(value) {
     }
     else {
         numberText.textContent = total;
+    }
+    if(total >= 1e13) {
+        total= 1e13;
     }
    
     
